@@ -21,10 +21,10 @@
       <div class="container navbar__inner">
         <a href="#home" class="navbar__brand"><span class="navbar__brand-highlight">Car</span> Service</a>
         <nav class="navbar__menu" id="navbarMenu">
-          <a href="#home" class="is-active">Главная</a>
-          <a href="#services">Услуги автосервиса</a>
+          <a href="#home">Главная</a>
+          <a href="#prices">Цены</a>
+          <a href="#reviews">Отзывы</a>
           <a href="#about">Об автосервисе</a>
-          <a href="#news">Новости и акции</a>
           <a href="#contacts">Контакты</a>
         </nav>
         <div class="navbar__phone" id="navbarPhone">
@@ -37,7 +37,7 @@
               stroke-linejoin="round"
             />
           </svg>
-          <a href="tel:+78005000000">8 800 500 0000</a>
+          <a href="tel:+48572061641">+48 572 061 641</a>
         </div>
         <button class="navbar__toggle" id="navbarToggle" aria-label="Открыть меню">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -83,7 +83,7 @@
               Записаться в автосервис
             </button>
             <div class="form__message" id="formMessage">Спасибо! Мы свяжемся с вами в течение 15 минут.</div>
-            <p class="form__privacy">Нажимая на кнопку, вы выражаете согласие с политикой конфиденциальности и правилами обработки персональных данных</p>
+            <p class="form__privacy">Нажимая на кнопку, вы выражаете согласие с <a href="privacy.html">политикой конфиденциальности</a> и правилами обработки персональных данных</p>
           <div class="hero__phone">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -94,7 +94,7 @@
                   stroke-linejoin="round"
                 />
               </svg>
-              <a href="tel:+78005000000">8 800 500 0000</a>
+              <a href="tel:+48572061641">+48 572 061 641</a>
           </div>
           </form>
         </div>
@@ -112,20 +112,20 @@
           <div class="services__grid">
             <article class="service-card">
               <div class="service-card__image">
-                <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=800&q=80" alt="Диагностика автомобиля" />
+                <img src="images/Диагностика автомобилей.jpg" alt="Диагностика автомобиля" />
               </div>
               <h3>Диагностика автомобиля</h3>
               <p>
                 Комплексная проверка систем и узлов вашего автомобиля для выявления скрытых неполадок.
               </p>
               <div class="service-card__actions">
-                <a href="#contacts" class="service-card__btn service-card__btn--secondary">
+                <a href="#" class="service-card__btn service-card__btn--secondary" data-service="diagnostics">
                   Подробнее
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </a>
-                <a href="#contacts" class="service-card__btn service-card__btn--primary">
+                <a href="#" class="service-card__btn service-card__btn--primary" data-consultation="diagnostics">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
@@ -135,20 +135,20 @@
             </article>
             <article class="service-card">
               <div class="service-card__image">
-                <img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=800&q=80" alt="Замена масла и фильтров" />
+                <img src="images/Замена масла и фильтров.png" alt="Замена масла и фильтров" />
               </div>
               <h3>Замена масла и фильтров</h3>
               <p>
                 Профессиональная замена масла и фильтров для обеспечения надежной работы двигателя и продления его срока службы.
               </p>
               <div class="service-card__actions">
-                <a href="#contacts" class="service-card__btn service-card__btn--secondary">
+                <a href="#" class="service-card__btn service-card__btn--secondary" data-service="oil">
                   Подробнее
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </a>
-                <a href="#contacts" class="service-card__btn service-card__btn--primary">
+                <a href="#" class="service-card__btn service-card__btn--primary" data-consultation="oil">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
@@ -158,20 +158,20 @@
             </article>
             <article class="service-card">
               <div class="service-card__image">
-                <img src="https://images.unsplash.com/photo-1632185028509-3b831df8cc8b?auto=format&fit=crop&w=800&q=80" alt="Техническое обслуживание" />
+                <img src="images/Техническое обслуживание.png" alt="Техническое обслуживание" />
               </div>
               <h3>Техническое обслуживание</h3>
               <p>
                 Профилактический осмотр всех систем автомобиля для предотвращения неисправностей и продления срока службы.
               </p>
               <div class="service-card__actions">
-                <a href="#contacts" class="service-card__btn service-card__btn--secondary">
+                <a href="#" class="service-card__btn service-card__btn--secondary" data-service="maintenance">
                   Подробнее
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </a>
-                <a href="#contacts" class="service-card__btn service-card__btn--primary">
+                <a href="#" class="service-card__btn service-card__btn--primary" data-consultation="maintenance">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
@@ -181,20 +181,20 @@
             </article>
             <article class="service-card">
               <div class="service-card__image">
-                <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=800&q=80" alt="Кузовной ремонт" />
+                <img src="images/Кузовной ремонт.jpg" alt="Кузовной ремонт" />
               </div>
               <h3>Кузовной ремонт</h3>
               <p>
                 Устранение всех видов повреждений кузова, включая вмятины, царапины и покраску с использованием современных технологий.
               </p>
               <div class="service-card__actions">
-                <a href="#contacts" class="service-card__btn service-card__btn--secondary">
+                <a href="#" class="service-card__btn service-card__btn--secondary" data-service="bodywork">
                   Подробнее
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </a>
-                <a href="#contacts" class="service-card__btn service-card__btn--primary">
+                <a href="#" class="service-card__btn service-card__btn--primary" data-consultation="bodywork">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
@@ -204,20 +204,20 @@
             </article>
             <article class="service-card">
               <div class="service-card__image">
-                <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80" alt="Замена тормозных систем" />
+                <img src="images/Замена тормозных систем.jpg" alt="Замена тормозных систем" />
               </div>
               <h3>Замена тормозных систем</h3>
               <p>
                 Полная замена тормозных колодок, дисков и жидкости для повышения безопасности на дороге.
               </p>
               <div class="service-card__actions">
-                <a href="#contacts" class="service-card__btn service-card__btn--secondary">
+                <a href="#" class="service-card__btn service-card__btn--secondary" data-service="brakes">
                   Подробнее
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </a>
-                <a href="#contacts" class="service-card__btn service-card__btn--primary">
+                <a href="#" class="service-card__btn service-card__btn--primary" data-consultation="brakes">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
@@ -227,20 +227,20 @@
             </article>
             <article class="service-card">
               <div class="service-card__image">
-                <img src="https://images.unsplash.com/photo-1593941707882-a5bac6861b2b?auto=format&fit=crop&w=800&q=80" alt="Ремонт трансмиссии" />
+                <img src="images/Ремонт трансмиссии.jpg" alt="Ремонт трансмиссии" />
               </div>
               <h3>Ремонт трансмиссии</h3>
               <p>
                 Диагностика и восстановление трансмиссии для обеспечения плавного и надежного переключения передач.
               </p>
               <div class="service-card__actions">
-                <a href="#contacts" class="service-card__btn service-card__btn--secondary">
+                <a href="#" class="service-card__btn service-card__btn--secondary" data-service="transmission">
                   Подробнее
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </a>
-                <a href="#contacts" class="service-card__btn service-card__btn--primary">
+                <a href="#" class="service-card__btn service-card__btn--primary" data-consultation="transmission">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
@@ -252,23 +252,237 @@
         </div>
       </section>
 
+      <section id="prices">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Актуальные цены</h2>
+            <p>
+              Прозрачные цены на услуги автосервиса. Указаны минимальные цены от указанной суммы.
+            </p>
+          </div>
+          <div class="prices__grid">
+            <div class="price-category">
+              <h3 class="price-category__title">Масла и фильтры</h3>
+              <div class="price-list">
+                <div class="price-item">
+                  <div class="price-item__name">Замена масла с фильтром</div>
+                  <div class="price-item__price">от 80,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена воздушного фильтра</div>
+                  <div class="price-item__price">от 35,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена топливного фильтра</div>
+                  <div class="price-item__price">от 50,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена салонного фильтра</div>
+                  <div class="price-item__price">от 35,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена свечей зажигания (4 шт.)</div>
+                  <div class="price-item__price">от 75,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена свечей накаливания (4 шт.)</div>
+                  <div class="price-item__price">от 90,00 zł</div>
+                </div>
+              </div>
+            </div>
+            <div class="price-category">
+              <h3 class="price-category__title">Жидкости</h3>
+              <div class="price-list">
+                <div class="price-item">
+                  <div class="price-item__name">Замена тормозной жидкости</div>
+                  <div class="price-item__price">от 130,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена охлаждающей жидкости</div>
+                  <div class="price-item__price">от 180,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена масла в МКПП</div>
+                  <div class="price-item__price">от 90,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена масла в АКПП</div>
+                  <div class="price-item__price">от 250,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена масла в заднем мосту</div>
+                  <div class="price-item__price">от 90,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Очистка дроссельной заслонки</div>
+                  <div class="price-item__price">от 90,00 zł</div>
+                </div>
+              </div>
+            </div>
+            <div class="price-category">
+              <h3 class="price-category__title">Тормозная система</h3>
+              <div class="price-list">
+                <div class="price-item">
+                  <div class="price-item__name">Замена передних колодок (комплект)</div>
+                  <div class="price-item__price">от 160,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена задних колодок (комплект)</div>
+                  <div class="price-item__price">от 160,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена тормозных дисков + колодок (2 шт.)</div>
+                  <div class="price-item__price">от 180,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена тормозных колодок барабанных</div>
+                  <div class="price-item__price">от 180,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена тормозных барабанов + колодок (2 шт.)</div>
+                  <div class="price-item__price">от 180,00 zł</div>
+                </div>
+              </div>
+            </div>
+            <div class="price-category">
+              <h3 class="price-category__title">Подвеска</h3>
+              <div class="price-list">
+                <div class="price-item">
+                  <div class="price-item__name">Замена передних амортизаторов (1 шт.)</div>
+                  <div class="price-item__price">от 220,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена задних амортизаторов (1 шт.)</div>
+                  <div class="price-item__price">от 100,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена передних пружин (1 шт.)</div>
+                  <div class="price-item__price">от 220,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена задних пружин (1 шт.)</div>
+                  <div class="price-item__price">от 90,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена переднего подшипника (1 шт.)</div>
+                  <div class="price-item__price">от 180,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена заднего подшипника (1 шт.)</div>
+                  <div class="price-item__price">от 180,00 zł</div>
+                </div>
+              </div>
+            </div>
+            <div class="price-category">
+              <h3 class="price-category__title">Рулевое управление</h3>
+              <div class="price-list">
+                <div class="price-item">
+                  <div class="price-item__name">Замена рулевой тяги (1 шт.)</div>
+                  <div class="price-item__price">от 90,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена наконечника рулевой тяги (1 шт.)</div>
+                  <div class="price-item__price">от 75,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена стойки стабилизатора (1 шт.)</div>
+                  <div class="price-item__price">от 75,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена рычага подвески (1 шт.)</div>
+                  <div class="price-item__price">от 90,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена шарнира рычага (1 шт.)</div>
+                  <div class="price-item__price">от 90,00 zł</div>
+                </div>
+              </div>
+            </div>
+            <div class="price-category">
+              <h3 class="price-category__title">Трансмиссия и другое</h3>
+              <div class="price-list">
+                <div class="price-item">
+                  <div class="price-item__name">Замена внутреннего ШРУСа (1 шт.)</div>
+                  <div class="price-item__price">от 220,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена наружного ШРУСа (1 шт.)</div>
+                  <div class="price-item__price">от 220,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена шланга системы охлаждения</div>
+                  <div class="price-item__price">от 90,00 zł</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-item__name">Замена патрубка охлаждающей жидкости + прокладок</div>
+                  <div class="price-item__price">от 180,00 zł</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="prices__footer">
+            <button class="prices__consultation-btn" id="pricesConsultationBtn">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              Получить консультацию
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="reviews">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Отзывы наших клиентов</h2>
+            <p>
+              Благодарим наших клиентов за доверие и честные отзывы о нашей работе.
+            </p>
+          </div>
+          <div class="reviews__grid">
+            <div class="review-card" data-review-image="images/Отзыв 1.png" data-review-alt="Отзыв клиента 1">
+              <div class="review-card__image">
+                <img src="images/Отзыв 1.png" alt="Отзыв клиента 1" />
+              </div>
+            </div>
+            <div class="review-card" data-review-image="images/Отзыв 2.png" data-review-alt="Отзыв клиента 2">
+              <div class="review-card__image">
+                <img src="images/Отзыв 2.png" alt="Отзыв клиента 2" />
+              </div>
+            </div>
+            <div class="review-card" data-review-image="images/Отзыв 3.png" data-review-alt="Отзыв клиента 3">
+              <div class="review-card__image">
+                <img src="images/Отзыв 3.png" alt="Отзыв клиента 3" />
+              </div>
+            </div>
+          </div>
+          <div class="reviews__footer">
+            <p class="reviews__footer-text">
+              Посмотреть больше отзывов, а также оставить свой вы можете перейдя по ссылке
+            </p>
+            <a href="https://business.google.com/v/warsztat-28/012095691237591413170/844a/_/rev/" target="_blank" rel="noopener noreferrer" class="reviews__button">
+              Больше отзывов
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
       <section id="about">
         <div class="container about">
           <div class="about__content">
             <div class="section-heading">
               <span>О нас</span>
-              <h2>Команда инженеров, влюбленных в автомобили</h2>
-              <p>
-                Мы объединяем опыт дилерских центров и независимого сервиса, чтобы предложить индивидуальный подход, прозрачные сметы и точное соблюдение сроков. В CarPro Garage вы всегда знаете, что происходит с вашим автомобилем.
-              </p>
+              <h2>Команда профессионалов, влюбленных в автомобили</h2>
             </div>
             <p>
-              Наши мастерские оборудованы стендами BOSCH и Hunter, а склад запчастей позволяет выполнять большинство ремонтов без дополнительного ожидания. Для корпоративных клиентов разработаны пакеты сопровождения с персональным менеджером.
+              Наша компания — это мастера, которые любят своё дело и уважают клиентов. Мы ставим перед собой цель делать сервис автомобиля удобным и надёжным для каждого владельца.
             </p>
-            <div class="hero__badges">
-              <div class="hero__badge">Сертифицированный партнер BOSCH Service</div>
-              <div class="hero__badge">Страховые случаи без очереди</div>
-            </div>
+            <p>
+              Наша миссия — помогать людям безопасно пользоваться своим автомобилем, обеспечивая качественный и современный ремонт.
+            </p>
           </div>
           <div class="about__stats">
             <div class="stat-card">
@@ -291,53 +505,6 @@
         </div>
       </section>
 
-      <section id="news">
-        <div class="container">
-          <div class="section-heading">
-            <span>Новости и акции</span>
-            <h2>Следите за обновлениями CarPro Garage</h2>
-            <p>
-              Публикуем свежие акции, новости по новым услугам и отчёты о реализованных проектах. Подпишитесь на нашу рассылку, чтобы не пропустить выгодные предложения.
-            </p>
-          </div>
-          <div class="news__grid">
-            <article class="news-card">
-              <div class="news-card__image" style="background-image: url('https://images.unsplash.com/photo-1585421514284-efb74c2b69ba?auto=format&fit=crop&w=900&q=80');"></div>
-              <div class="news-card__content">
-                <div class="news-card__meta">Октябрь 2025</div>
-                <h3>Скидка 20% на техосмотр для корпоративных парков</h3>
-                <p>
-                  Для юридических лиц доступно пакетное обслуживание с приоритетной записью и выделенной линией поддержки.
-                </p>
-                <a href="#contacts">Узнать детали</a>
-              </div>
-            </article>
-            <article class="news-card">
-              <div class="news-card__image" style="background-image: url('https://images.unsplash.com/photo-1515516969-d4008cc6241b?auto=format&fit=crop&w=900&q=80');"></div>
-              <div class="news-card__content">
-                <div class="news-card__meta">Сентябрь 2025</div>
-                <h3>Новый стенд 3D-сход-развал Hunter Elite</h3>
-                <p>
-                  Высокоточная калибровка за 15 минут. Бесплатная проверка при комплексной диагностике в октябре.
-                </p>
-                <a href="#booking">Записаться</a>
-              </div>
-            </article>
-            <article class="news-card">
-              <div class="news-card__image" style="background-image: url('https://images.unsplash.com/photo-1606046604972-77cc76aace7f?auto=format&fit=crop&w=900&q=80');"></div>
-              <div class="news-card__content">
-                <div class="news-card__meta">Август 2025</div>
-                <h3>Программа лояльности: кэшбэк до 10%</h3>
-                <p>
-                  Получайте бонусы за каждое посещение и тратьте их на сервис, аксессуары или шиномонтаж.
-                </p>
-                <a href="#contacts">Присоединиться</a>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
       <section id="contacts">
         <div class="container contacts">
           <div class="contacts__info">
@@ -345,29 +512,29 @@
               <span>Контакты</span>
               <h2>Свяжитесь с нами</h2>
               <p>
-                Автосервис CarPro Garage расположен рядом с транспортной развязкой улиц Piłsudskiego и Kopcińskiego. Есть просторная парковка для клиентов и зона ожидания с Wi-Fi.
+                Автосервис Warsztat 28 расположен по адресу Legionów 108 в центре Лодзи, недалеко от оживлённых городских улиц. Здесь есть удобный въезд, туалет для посетителей и парковка. Клиентам доступны бесплатная диагностика подвески при замене масла, зона ожидания и обслуживание на польском, русском и английском языках. Оплата возможна наличными, картой и бесконтактно.
               </p>
             </div>
             <div class="contacts__group">
               <h3>Адрес</h3>
-              <p>Łódź, ul. Piłsudskiego 98</p>
-              <a href="https://maps.app.goo.gl/VK5mGx1KQM7xZ8Ls5" target="_blank" rel="noopener">Построить маршрут</a>
+              <p>Warsztat 28, Legionów 108, 90-764 Łódź, Польша</p>
+              <a href="https://www.google.com/maps/dir/?api=1&destination=51.7716926,19.4341858" target="_blank" rel="noopener">Построить маршрут</a>
             </div>
             <div class="contacts__group">
               <h3>График работы</h3>
-              <p>Пн–Пт: 08:00–21:00</p>
-              <p>Сб–Вс: 09:00–19:00</p>
+              <p>Пн–Пт: 08:00–18:00</p>
+              <p>Сб–Вс: выходной</p>
             </div>
             <div class="contacts__group">
               <h3>Связь</h3>
-              <a href="tel:+48422301010">+48 422 301 010</a>
+              <a href="tel:+48572061641">+48 572 061 641</a>
               <a href="mailto:service@carprogarage.pl">service@carprogarage.pl</a>
             </div>
           </div>
           <div class="contacts__map">
             <iframe
               title="Карта расположения CarPro Garage"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2442.252244828508!2d19.48270947663466!3d51.759248271813106!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471a341b6e9d8c81%3A0x6908ae50918950ea!2sJ%C3%B3zefa%20Pi%C5%82sudskiego%2043%2C%2090-132%20%C5%81%C3%B3d%C5%BA!5e0!3m2!1sru!2spl!4v1698075300000!5m2!1sru!2spl"
+              src="https://www.google.com/maps?q=51.7716926,19.4341858&hl=ru&z=15&output=embed"
               allowfullscreen=""
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
@@ -382,8 +549,7 @@
         <div>© 2025 CarPro Garage. Все права защищены.</div>
         <div class="footer__links">
           <a href="#services">Каталог услуг</a>
-          <a href="#news">Акции</a>
-          <a href="#contacts">Политика конфиденциальности</a>
+          <a href="privacy.html">Политика конфиденциальности</a>
         </div>
       </div>
     </footer>
@@ -400,6 +566,93 @@
       </svg>
       Записаться сейчас
     </button>
+
+    <!-- Модальное окно услуги -->
+    <div class="service-modal" id="serviceModal">
+      <div class="service-modal__overlay"></div>
+      <div class="service-modal__content">
+        <button class="service-modal__close" id="serviceModalClose" aria-label="Закрыть">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="service-modal__image">
+          <img id="serviceModalImage" src="" alt="" />
+        </div>
+        <div class="service-modal__body">
+          <h2 class="service-modal__title" id="serviceModalTitle"></h2>
+          <div class="service-modal__description" id="serviceModalDescription"></div>
+          <div class="service-modal__footer">
+            <button class="service-modal__consultation-btn" id="serviceModalConsultationBtn">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              Консультация по услуге
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Модальное окно просмотра отзыва -->
+    <div class="review-viewer-modal" id="reviewViewerModal">
+      <div class="review-viewer-modal__overlay"></div>
+      <div class="review-viewer-modal__content">
+        <button class="review-viewer-modal__close" id="reviewViewerModalClose" aria-label="Закрыть">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="review-viewer-modal__image-wrapper">
+          <img id="reviewViewerImage" src="" alt="" class="review-viewer-modal__image" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Модальное окно формы консультации -->
+    <div class="consultation-modal" id="consultationModal">
+      <div class="consultation-modal__overlay"></div>
+      <div class="consultation-modal__content">
+        <button class="consultation-modal__close" id="consultationModalClose" aria-label="Закрыть">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <h2 class="consultation-modal__title">Консультация по услуге</h2>
+        <form class="consultation-form" id="consultationForm">
+          <div class="consultation-form__group">
+            <label for="consultationPhone" class="consultation-form__label">Ваш телефон:</label>
+            <input 
+              type="tel" 
+              id="consultationPhone" 
+              name="phone" 
+              class="consultation-form__input" 
+              placeholder="+48 (___) ___-___" 
+              required 
+              pattern="[\+]?48\s?[0-9]{3}\s?[0-9]{3}\s?[0-9]{3}"
+            />
+          </div>
+          <div class="consultation-form__group">
+            <label for="consultationQuestion" class="consultation-form__label">Ваш вопрос:</label>
+            <textarea 
+              id="consultationQuestion" 
+              name="question" 
+              class="consultation-form__textarea" 
+              placeholder="Введите сообщение" 
+              required
+              rows="5"
+            ></textarea>
+          </div>
+          <div class="consultation-form__footer">
+            <p class="consultation-form__privacy">* Нажимая на кнопку, вы выражаете согласие с <a href="privacy.html">политикой конфиденциальности</a> и правилами обработки персональных данных</p>
+            <button type="submit" class="consultation-form__submit">
+              Отправить
+            </button>
+          </div>
+          <div class="consultation-form__message" id="consultationMessage"></div>
+        </form>
+      </div>
+    </div>
 
     <script src="script.js" defer></script>
   </body>
