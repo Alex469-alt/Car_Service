@@ -66,9 +66,9 @@ if (bookingForm) {
     const name = formData.get('name');
     const phone = formData.get('phone');
 
-    if (!description || !name || !phone) {
+    if (!name || !phone) {
       if (formMessage) {
-        formMessage.textContent = 'Заполните все поля формы.';
+        formMessage.textContent = 'Заполните обязательные поля формы (имя и телефон).';
         formMessage.style.display = 'block';
         formMessage.style.color = '#ffb300';
       }
@@ -449,15 +449,6 @@ if (consultationModal && consultationPhone) {
       if (phoneNumber.length !== 9) {
         if (consultationMessage) {
           consultationMessage.textContent = 'Пожалуйста, введите полный номер телефона (9 цифр).';
-          consultationMessage.style.display = 'block';
-          consultationMessage.style.color = '#ffb300';
-        }
-        return;
-      }
-      
-      if (!question) {
-        if (consultationMessage) {
-          consultationMessage.textContent = 'Пожалуйста, введите ваш вопрос.';
           consultationMessage.style.display = 'block';
           consultationMessage.style.color = '#ffb300';
         }
