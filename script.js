@@ -80,15 +80,7 @@ if (bookingForm) {
   });
 }
 
-if (floatingBooking) {
-  floatingBooking.addEventListener('click', () => {
-    const descriptionField = document.getElementById('serviceDescription');
-    if (descriptionField) {
-      descriptionField.focus();
-      descriptionField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  });
-}
+// Кнопка "Позвонить нам" теперь использует href="tel:..." и не требует обработчика
 
 // Данные об услугах
 const servicesData = {

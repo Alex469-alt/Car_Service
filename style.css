@@ -1160,26 +1160,47 @@ footer .footer__links {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 20px;
-  background-color: rgba(30, 31, 35, 0.92);
-  border: 1px solid rgba(255, 87, 34, 0.4);
+  padding: 16px 24px;
+  background-color: var(--primary);
+  border: none;
   border-radius: 999px;
   color: var(--secondary);
   font-weight: 600;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  font-size: 15px;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(255, 87, 34, 0.4), 0 0 0 0 rgba(255, 87, 34, 0.7);
   cursor: pointer;
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition: all 0.3s ease;
+  z-index: 999;
+  backdrop-filter: blur(10px);
+  animation: pulse 2s infinite;
 }
 
 .floating-booking:hover {
-  transform: translateY(-4px);
-  border-color: var(--primary);
+  transform: translateY(-4px) scale(1.05);
+  background-color: var(--primary-hover);
+  box-shadow: 0 12px 32px rgba(255, 87, 34, 0.5), 0 0 0 8px rgba(255, 87, 34, 0.1);
+  color: var(--secondary);
+}
+
+.floating-booking:active {
+  transform: translateY(-2px) scale(1.02);
 }
 
 .floating-booking svg {
-  width: 18px;
-  height: 18px;
-  color: var(--primary);
+  width: 20px;
+  height: 20px;
+  color: var(--secondary);
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 8px 24px rgba(255, 87, 34, 0.4), 0 0 0 0 rgba(255, 87, 34, 0.7);
+  }
+  50% {
+    box-shadow: 0 8px 24px rgba(255, 87, 34, 0.4), 0 0 0 4px rgba(255, 87, 34, 0.2);
+  }
 }
 
 @media (max-width: 1200px) {
@@ -1327,8 +1348,15 @@ footer .footer__links {
   .floating-booking {
     right: 16px;
     left: 16px;
-    bottom: 24px;
+    bottom: 20px;
     justify-content: center;
+    padding: 14px 20px;
+    font-size: 14px;
+  }
+  
+  .floating-booking svg {
+    width: 18px;
+    height: 18px;
   }
 }
 
@@ -1415,6 +1443,20 @@ footer .footer__links {
 
   .stat-card__label {
     font-size: 12px;
+  }
+
+  .floating-booking {
+    right: 12px;
+    left: 12px;
+    bottom: 16px;
+    padding: 12px 18px;
+    font-size: 13px;
+    gap: 10px;
+  }
+  
+  .floating-booking svg {
+    width: 16px;
+    height: 16px;
   }
 }
 
