@@ -75,6 +75,32 @@ if (bookingForm) {
       return;
     }
 
+    // Сохраняем данные заявки для отправки на вебхук на странице спасибо
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const utm = {
+        utm_source: urlParams.get('utm_source'),
+        utm_medium: urlParams.get('utm_medium'),
+        utm_campaign: urlParams.get('utm_campaign'),
+        utm_term: urlParams.get('utm_term'),
+        utm_content: urlParams.get('utm_content')
+      };
+
+      const payload = {
+        type: 'booking',
+        name: String(name).trim(),
+        phone: String(phone).trim(),
+        description: description ? String(description).trim() : '',
+        page: window.location.href,
+        userAgent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+        utm
+      };
+      sessionStorage.setItem('car_service_submission', JSON.stringify(payload));
+    } catch (e) {
+      // игнорируем ошибки сохранения, чтобы не мешать пользователю
+    }
+
     // Перенаправление на страницу благодарности
     window.location.href = 'thanks.html';
   });
@@ -447,6 +473,32 @@ if (consultationModal && consultationPhone) {
         return;
       }
       
+      // Сохраняем данные консультации для отправки на вебхук на странице спасибо
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const utm = {
+          utm_source: urlParams.get('utm_source'),
+          utm_medium: urlParams.get('utm_medium'),
+          utm_campaign: urlParams.get('utm_campaign'),
+          utm_term: urlParams.get('utm_term'),
+          utm_content: urlParams.get('utm_content')
+        };
+
+        const payload = {
+          type: 'consultation',
+          phone: `+48${phoneNumber}`,
+          question: question,
+          page: window.location.href,
+          userAgent: navigator.userAgent,
+          timestamp: new Date().toISOString(),
+          utm,
+          serviceContext: currentServiceId || null
+        };
+        sessionStorage.setItem('car_service_submission', JSON.stringify(payload));
+      } catch (e2) {
+        // игнорируем ошибки сохранения
+      }
+
       // Перенаправление на страницу благодарности
       window.location.href = 'thanks.html';
     });
@@ -486,4 +538,38 @@ reviewViewerModal.addEventListener('click', (e) => {
     closeReviewViewer();
   }
 });
+
+
+// Отправка данных на вебхук на странице благодарности
+(function sendWebhookOnThanks() {
+  try {
+    const path = window.location.pathname || '';
+    if (!/thanks\.html$/i.test(path)) return;
+
+    const raw = sessionStorage.getItem('car_service_submission');
+    if (!raw) return;
+
+    const data = JSON.parse(raw);
+
+    // Добавим защищённую метку источника
+    data.source = 'warsztat28_site';
+
+    // Отправка POST на вебхук
+    fetch('https://alex87ai.ru/webhook/43498cf2-2d7e-4045-9fe1-44edd0faf7e3', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+      keepalive: true // на случай закрытия вкладки
+    }).catch(() => {
+      // молча игнорируем ошибки сети, чтобы не мешать UX
+    }).finally(() => {
+      // очищаем данные независимо от результата, чтобы не было повторной отправки
+      try { sessionStorage.removeItem('car_service_submission'); } catch (_) {}
+    });
+  } catch (e) {
+    // ничего не делаем, чтобы не ломать страницу
+  }
+})(); 
 
