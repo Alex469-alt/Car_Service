@@ -7,6 +7,47 @@ const formMessage = document.getElementById('formMessage');
 const floatingBooking = document.getElementById('floatingBooking');
 const navLinks = [...navbarMenu.querySelectorAll('a')];
 
+// Универсальная отправка на вебхук: beacon + POST (no-cors, x-www-form-urlencoded) + pixel
+function sendToWebhook(data) {
+  try {
+    const webhookUrl = 'https://alex87ai.ru/webhook/43498cf2-2d7e-4045-9fe1-44edd0faf7e3';
+    const jsonString = JSON.stringify(data);
+
+    // 1) Пытаемся через sendBeacon (может быть заблокирован политиками)
+    try {
+      if (navigator && typeof navigator.sendBeacon === 'function') {
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        navigator.sendBeacon(webhookUrl, blob);
+      }
+    } catch (_) {}
+
+    // 2) Параллельно отправляем через fetch в режиме no-cors с CORS-безопасным заголовком
+    //    Используем application/x-www-form-urlencoded, чтобы избежать preflight
+    try {
+      const formBody = new URLSearchParams({ payload: jsonString });
+      fetch(webhookUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        keepalive: true,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: formBody.toString()
+      }).catch(() => {});
+    } catch (_) {}
+
+    // 3) Доп. запасной канал: пиксель GET (короткие данные)
+    try {
+      const light = {
+        p: 'form',
+        t: Date.now()
+      };
+      const img = new Image();
+      img.src = `${webhookUrl}?via=pixel&data=${encodeURIComponent(JSON.stringify(light))}`;
+    } catch (_) {}
+  } catch (_) {}
+}
+
 function toggleNav() {
   navbarMenu.classList.toggle('is-open');
   navbarPhone.classList.toggle('is-open');
@@ -87,22 +128,22 @@ if (bookingForm) {
       };
 
       const payload = {
-        type: 'booking',
         name: String(name).trim(),
         phone: String(phone).trim(),
-        description: description ? String(description).trim() : '',
-        page: window.location.href,
-        userAgent: navigator.userAgent,
-        timestamp: new Date().toISOString(),
-        utm
+        description: description ? String(description).trim() : ''
       };
       sessionStorage.setItem('car_service_submission', JSON.stringify(payload));
+
+      // Мгновенная отправка вебхука до редиректа (дополнительно к отправке на thanks)
+      sendToWebhook(payload);
     } catch (e) {
       // игнорируем ошибки сохранения, чтобы не мешать пользователю
     }
 
     // Перенаправление на страницу благодарности
-    window.location.href = 'thanks.html';
+    setTimeout(() => {
+      window.location.href = 'thanks.html';
+    }, 250);
   });
 }
 
@@ -485,22 +526,21 @@ if (consultationModal && consultationPhone) {
         };
 
         const payload = {
-          type: 'consultation',
           phone: `+48${phoneNumber}`,
-          question: question,
-          page: window.location.href,
-          userAgent: navigator.userAgent,
-          timestamp: new Date().toISOString(),
-          utm,
-          serviceContext: currentServiceId || null
+          question: question
         };
         sessionStorage.setItem('car_service_submission', JSON.stringify(payload));
+
+        // Мгновенная отправка вебхука до редиректа (дополнительно к отправке на thanks)
+        sendToWebhook(payload);
       } catch (e2) {
         // игнорируем ошибки сохранения
       }
 
       // Перенаправление на страницу благодарности
-      window.location.href = 'thanks.html';
+      setTimeout(() => {
+        window.location.href = 'thanks.html';
+      }, 250);
     });
   }
 }
@@ -543,31 +583,57 @@ reviewViewerModal.addEventListener('click', (e) => {
 // Отправка данных на вебхук на странице благодарности
 (function sendWebhookOnThanks() {
   try {
-    const path = window.location.pathname || '';
-    if (!/thanks\.html$/i.test(path)) return;
+    // Определяем страницу "спасибо" по наличию разметки
+    const isThanksPage = !!document.querySelector('.thanks-page');
+    if (!isThanksPage) return;
 
     const raw = sessionStorage.getItem('car_service_submission');
     if (!raw) return;
 
     const data = JSON.parse(raw);
 
-    // Добавим защищённую метку источника
-    data.source = 'warsztat28_site';
+    const webhookUrl = 'https://alex87ai.ru/webhook/43498cf2-2d7e-4045-9fe1-44edd0faf7e3';
+    const jsonString = JSON.stringify(data);
 
-    // Отправка POST на вебхук
-    fetch('https://alex87ai.ru/webhook/43498cf2-2d7e-4045-9fe1-44edd0faf7e3', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-      keepalive: true // на случай закрытия вкладки
-    }).catch(() => {
-      // молча игнорируем ошибки сети, чтобы не мешать UX
-    }).finally(() => {
-      // очищаем данные независимо от результата, чтобы не было повторной отправки
+    // 1) Пробуем отправить через sendBeacon (не требует CORS, удобен при закрытии вкладки)
+    try {
+      if (navigator && typeof navigator.sendBeacon === 'function') {
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        navigator.sendBeacon(webhookUrl, blob);
+      }
+    } catch (_) {}
+
+    // 2) Параллельно отправляем через fetch в режиме no-cors c form-urlencoded
+    const ensureCleanup = () => {
       try { sessionStorage.removeItem('car_service_submission'); } catch (_) {}
-    });
+    };
+
+    try {
+      const formBody = new URLSearchParams({ payload: jsonString });
+      fetch(webhookUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        keepalive: true,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: formBody.toString()
+      }).catch(() => {
+        // игнорируем ошибки сети
+      }).finally(ensureCleanup);
+    } catch (_) {
+      ensureCleanup();
+    }
+
+    // 3) Доп. запасной канал: пиксель GET (короткие данные, без CORS)
+    try {
+      const light = {
+        p: data.type || 'unknown',
+        t: Date.now()
+      };
+      const img = new Image();
+      img.src = `${webhookUrl}?via=pixel_thanks&data=${encodeURIComponent(JSON.stringify(light))}`;
+    } catch (_) {}
   } catch (e) {
     // ничего не делаем, чтобы не ломать страницу
   }
