@@ -6,6 +6,9 @@ const bookingForm = document.getElementById('bookingForm');
 const formMessage = document.getElementById('formMessage');
 const floatingBooking = document.getElementById('floatingBooking');
 const navLinks = [...navbarMenu.querySelectorAll('a')];
+const leadForm = document.getElementById('leadForm');
+const leadPhoneInput = document.getElementById('leadPhone');
+const leadFormError = document.getElementById('leadFormError');
 
 // Универсальная отправка на вебхук: beacon + POST (no-cors, x-www-form-urlencoded) + pixel
 function sendToWebhook(data) {
@@ -294,6 +297,35 @@ serviceButtons.forEach(button => {
     openServiceModal(serviceId);
   });
 });
+
+if (leadForm) {
+  function validateLeadPhone(value) {
+    return value.replace(/\D/g, '').length >= 8;
+  }
+
+  leadForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const phone = leadPhoneInput.value.trim();
+
+    if (!validateLeadPhone(phone)) {
+      if (leadFormError) {
+        leadFormError.textContent = 'Wpisz prawidłowy numer telefonu (minimum 8 cyfr).';
+      }
+      leadPhoneInput.focus();
+      return;
+    }
+
+    if (leadFormError) {
+      leadFormError.textContent = '';
+    }
+
+    try {
+      sessionStorage.setItem('lead_form_phone', phone);
+    } catch (_) {}
+
+    window.location.href = 'thanks.html';
+  });
+}
 
 serviceModalClose.addEventListener('click', closeServiceModal);
 

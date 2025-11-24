@@ -79,7 +79,7 @@
               <input type="text" id="clientName" name="name" placeholder="Twoje imię" required />
             </div>
             <div class="form-group">
-              <input type="tel" id="clientPhone" name="phone" placeholder="Twój telefon" required pattern="[\+0-9\s-]{9,}" />
+              <input type="tel" id="clientPhone" name="phone" placeholder="Twój telefon" required pattern="[\+0-9\s\-\(\)]{9,}" />
             </div>
             <button type="submit" class="button">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -110,6 +110,36 @@
           </form>
         </div>
         <div class="hero__right" role="presentation"></div>
+      </section>
+
+      <section class="lead-form-section" id="lead-magnet">
+        <div class="lead-form-content">
+          <p class="lead-form-value">
+            Ten checklist pomaga chronić samochód przed niespodziewanymi awariami zimą, ogranicza koszty napraw i podnosi bezpieczeństwo na drodze.
+          </p>
+          <h2>❄️ Zostaw numer telefonu i odbierz checklist przygotowania auta na zimę</h2>
+          <p>W środku czeka dodatkowy bonus dla klientów Warsztat 28.</p>
+          <form class="lead-form" id="leadForm">
+            <label for="leadPhone">Twój numer telefonu</label>
+            <div class="lead-form-input">
+              <input
+                type="tel"
+                id="leadPhone"
+                name="phone"
+                placeholder="+48 600 000 000"
+                inputmode="numeric"
+                pattern="[0-9\s\+\-\(\)]{8,}"
+                required
+              />
+              <button type="submit">Otrzymać checklist</button>
+            </div>
+            <div class="lead-form-error" id="leadFormError"></div>
+            <small>
+              Niczego nie sprzedajemy — to bonusowy materiał dla Twojego bezpieczeństwa. Nie spamujemy.<br />
+              Klikając przycisk, wyrażasz zgodę na <a href="privacy.html" target="_blank" rel="noopener">politykę prywatności</a> i zasady przetwarzania danych osobowych.
+            </small>
+          </form>
+        </div>
       </section>
 
       <section id="services">
