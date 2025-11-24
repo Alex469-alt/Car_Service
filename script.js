@@ -10,25 +10,36 @@ const leadForm = document.getElementById('leadForm');
 const leadPhoneInput = document.getElementById('leadPhone');
 const leadFormError = document.getElementById('leadFormError');
 
-// Универсальная отправка на вебхук: beacon + POST (no-cors, x-www-form-urlencoded) + pixel
-function sendToWebhook(data) {
-  try {
-    const webhookUrl = 'https://alex87ai.ru/webhook/43498cf2-2d7e-4045-9fe1-44edd0faf7e3';
-    const jsonString = JSON.stringify(data);
+const WEBHOOK_URL = 'https://alex87ai.ru/webhook/43498cf2-2d7e-4045-9fe1-44edd0faf7e3';
 
-    // 1) Пытаемся через sendBeacon (может быть заблокирован политиками)
+function buildWebhookEnvelope(payload, meta = {}) {
+  return {
+    payload,
+    form: meta.form || null,
+    page: meta.page || window.location.href,
+    source: 'warsztat28_site',
+    timestamp: new Date().toISOString()
+  };
+}
+
+// Универсальная отправка на вебхук: beacon + POST (no-cors, x-www-form-urlencoded) + pixel
+function dispatchWebhook(envelope, options = {}) {
+  try {
+    const jsonString = JSON.stringify(envelope);
+    const onFinally = typeof options.onFinally === 'function' ? options.onFinally : null;
+
+    // 1) Пытаемся через sendBeacon
     try {
       if (navigator && typeof navigator.sendBeacon === 'function') {
         const blob = new Blob([jsonString], { type: 'application/json' });
-        navigator.sendBeacon(webhookUrl, blob);
+        navigator.sendBeacon(WEBHOOK_URL, blob);
       }
     } catch (_) {}
 
-    // 2) Параллельно отправляем через fetch в режиме no-cors с CORS-безопасным заголовком
-    //    Используем application/x-www-form-urlencoded, чтобы избежать preflight
+    // 2) Параллельно отправляем через fetch в режиме no-cors
     try {
       const formBody = new URLSearchParams({ payload: jsonString });
-      fetch(webhookUrl, {
+      fetch(WEBHOOK_URL, {
         method: 'POST',
         mode: 'no-cors',
         keepalive: true,
@@ -36,19 +47,30 @@ function sendToWebhook(data) {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         },
         body: formBody.toString()
-      }).catch(() => {});
-    } catch (_) {}
+      })
+        .catch(() => {})
+        .finally(() => {
+          if (onFinally) onFinally();
+        });
+    } catch (_) {
+      if (onFinally) onFinally();
+    }
 
-    // 3) Доп. запасной канал: пиксель GET (короткие данные)
+    // 3) Доп. запасной канал: пиксель GET
     try {
       const light = {
-        p: 'form',
+        p: envelope.form || 'form',
         t: Date.now()
       };
       const img = new Image();
-      img.src = `${webhookUrl}?via=pixel&data=${encodeURIComponent(JSON.stringify(light))}`;
+      img.src = `${WEBHOOK_URL}?via=pixel&data=${encodeURIComponent(JSON.stringify(light))}`;
     } catch (_) {}
   } catch (_) {}
+}
+
+function sendToWebhook(payload, meta = {}) {
+  const envelope = buildWebhookEnvelope(payload, meta);
+  dispatchWebhook(envelope);
 }
 
 function toggleNav() {
@@ -135,10 +157,14 @@ if (bookingForm) {
         phone: String(phone).trim(),
         description: description ? String(description).trim() : ''
       };
-      sessionStorage.setItem('car_service_submission', JSON.stringify(payload));
+      const submission = {
+        form: 'booking',
+        payload
+      };
+      sessionStorage.setItem('car_service_submission', JSON.stringify(submission));
 
       // Мгновенная отправка вебхука до редиректа (дополнительно к отправке на thanks)
-      sendToWebhook(payload);
+      sendToWebhook(payload, { form: submission.form });
     } catch (e) {
       // игнорируем ошибки сохранения, чтобы не мешать пользователю
     }
@@ -561,10 +587,14 @@ if (consultationModal && consultationPhone) {
           phone: `+48${phoneNumber}`,
           question: question
         };
-        sessionStorage.setItem('car_service_submission', JSON.stringify(payload));
+        const submission = {
+          form: 'consultation',
+          payload
+        };
+        sessionStorage.setItem('car_service_submission', JSON.stringify(submission));
 
         // Мгновенная отправка вебхука до редиректа (дополнительно к отправке на thanks)
-        sendToWebhook(payload);
+        sendToWebhook(payload, { form: submission.form });
       } catch (e2) {
         // игнорируем ошибки сохранения
       }
@@ -622,50 +652,16 @@ reviewViewerModal.addEventListener('click', (e) => {
     const raw = sessionStorage.getItem('car_service_submission');
     if (!raw) return;
 
-    const data = JSON.parse(raw);
-
-    const webhookUrl = 'https://alex87ai.ru/webhook/43498cf2-2d7e-4045-9fe1-44edd0faf7e3';
-    const jsonString = JSON.stringify(data);
-
-    // 1) Пробуем отправить через sendBeacon (не требует CORS, удобен при закрытии вкладки)
-    try {
-      if (navigator && typeof navigator.sendBeacon === 'function') {
-        const blob = new Blob([jsonString], { type: 'application/json' });
-        navigator.sendBeacon(webhookUrl, blob);
-      }
-    } catch (_) {}
-
-    // 2) Параллельно отправляем через fetch в режиме no-cors c form-urlencoded
-    const ensureCleanup = () => {
-      try { sessionStorage.removeItem('car_service_submission'); } catch (_) {}
+    const parsed = JSON.parse(raw);
+    const payload = parsed.payload || parsed;
+    const form = parsed.form || null;
+    const envelope = buildWebhookEnvelope(payload, { form });
+    const cleanup = () => {
+      try {
+        sessionStorage.removeItem('car_service_submission');
+      } catch (_) {}
     };
-
-    try {
-      const formBody = new URLSearchParams({ payload: jsonString });
-      fetch(webhookUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        keepalive: true,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-        body: formBody.toString()
-      }).catch(() => {
-        // игнорируем ошибки сети
-      }).finally(ensureCleanup);
-    } catch (_) {
-      ensureCleanup();
-    }
-
-    // 3) Доп. запасной канал: пиксель GET (короткие данные, без CORS)
-    try {
-      const light = {
-        p: data.type || 'unknown',
-        t: Date.now()
-      };
-      const img = new Image();
-      img.src = `${webhookUrl}?via=pixel_thanks&data=${encodeURIComponent(JSON.stringify(light))}`;
-    } catch (_) {}
+    dispatchWebhook(envelope, { onFinally: cleanup });
   } catch (e) {
     // ничего не делаем, чтобы не ломать страницу
   }
