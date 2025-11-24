@@ -22,50 +22,79 @@ function buildWebhookEnvelope(payload, meta = {}) {
   };
 }
 
-// Универсальная отправка на вебхук: beacon + POST (no-cors, x-www-form-urlencoded) + pixel
+// Универсальная отправка на вебхук: beacon + POST (cors) + fallback (no-cors)
 function dispatchWebhook(envelope, options = {}) {
   try {
     const jsonString = JSON.stringify(envelope);
     const onFinally = typeof options.onFinally === 'function' ? options.onFinally : null;
+    let sent = false;
 
-    // 1) Пытаемся через sendBeacon
+    const fallback = () => {
+      if (sent) return;
+      try {
+        const formBody = new URLSearchParams({ payload: jsonString });
+        fetch(WEBHOOK_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          keepalive: true,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+          },
+          body: formBody.toString()
+        })
+          .catch(() => {})
+          .finally(() => {
+            if (onFinally) onFinally();
+          });
+      } catch (_) {
+        if (onFinally) onFinally();
+      }
+    };
+
+    // 1) Основная попытка: fetch с JSON телом (cors)
+    try {
+      fetch(WEBHOOK_URL, {
+        method: 'POST',
+        keepalive: true,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: jsonString
+      })
+        .then((response) => {
+          if (response.ok || response.status === 0) {
+            sent = true;
+            console.log('[Webhook] Successfully sent via fetch (CORS)');
+          }
+        })
+        .catch((error) => {
+          console.warn('[Webhook] CORS fetch failed, trying fallback:', error);
+          fallback();
+        })
+        .finally(() => {
+          if (sent && onFinally) onFinally();
+        });
+    } catch (error) {
+      console.warn('[Webhook] Fetch error, trying fallback:', error);
+      fallback();
+    }
+
+    // 2) Параллельно пытаемся через sendBeacon (не требует CORS)
     try {
       if (navigator && typeof navigator.sendBeacon === 'function') {
         const blob = new Blob([jsonString], { type: 'application/json' });
-        navigator.sendBeacon(WEBHOOK_URL, blob);
+        const beaconSent = navigator.sendBeacon(WEBHOOK_URL, blob);
+        if (beaconSent) {
+          console.log('[Webhook] Sent via sendBeacon');
+        }
       }
-    } catch (_) {}
-
-    // 2) Параллельно отправляем через fetch в режиме no-cors
-    try {
-      const formBody = new URLSearchParams({ payload: jsonString });
-      fetch(WEBHOOK_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        keepalive: true,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-        body: formBody.toString()
-      })
-        .catch(() => {})
-        .finally(() => {
-          if (onFinally) onFinally();
-        });
-    } catch (_) {
-      if (onFinally) onFinally();
+    } catch (error) {
+      console.warn('[Webhook] sendBeacon failed:', error);
     }
-
-    // 3) Доп. запасной канал: пиксель GET
-    try {
-      const light = {
-        p: envelope.form || 'form',
-        t: Date.now()
-      };
-      const img = new Image();
-      img.src = `${WEBHOOK_URL}?via=pixel&data=${encodeURIComponent(JSON.stringify(light))}`;
-    } catch (_) {}
-  } catch (_) {}
+  } catch (error) {
+    console.error('[Webhook] dispatchWebhook error:', error);
+    if (options.onFinally) options.onFinally();
+  }
 }
 
 function sendToWebhook(payload, meta = {}) {
@@ -345,11 +374,27 @@ if (leadForm) {
       leadFormError.textContent = '';
     }
 
+    // Сохраняем данные для отправки на вебхук
     try {
-      sessionStorage.setItem('lead_form_phone', phone);
-    } catch (_) {}
+      const payload = {
+        phone: phone
+      };
+      const submission = {
+        form: 'lead',
+        payload
+      };
+      sessionStorage.setItem('car_service_submission', JSON.stringify(submission));
 
-    window.location.href = 'thanks.html';
+      // Мгновенная отправка вебхука до редиректа
+      sendToWebhook(payload, { form: 'lead' });
+    } catch (e) {
+      console.error('[Lead Form] Error saving submission:', e);
+    }
+
+    // Перенаправление на страницу благодарности
+    setTimeout(() => {
+      window.location.href = 'thanks.html';
+    }, 250);
   });
 }
 
@@ -644,26 +689,53 @@ reviewViewerModal.addEventListener('click', (e) => {
 
 // Отправка данных на вебхук на странице благодарности
 (function sendWebhookOnThanks() {
+  // Ждем загрузки DOM
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', sendWebhookOnThanks);
+    return;
+  }
+
   try {
     // Определяем страницу "спасибо" по наличию разметки
     const isThanksPage = !!document.querySelector('.thanks-page');
     if (!isThanksPage) return;
 
+    // Проверяем sessionStorage
     const raw = sessionStorage.getItem('car_service_submission');
-    if (!raw) return;
+    if (!raw) {
+      console.warn('[Webhook] No submission data in sessionStorage');
+      return;
+    }
 
-    const parsed = JSON.parse(raw);
+    let parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (e) {
+      console.error('[Webhook] Failed to parse sessionStorage data:', e);
+      return;
+    }
+
+    // Извлекаем payload и form
     const payload = parsed.payload || parsed;
-    const form = parsed.form || null;
+    const form = parsed.form || 'unknown';
+
+    // Строим envelope
     const envelope = buildWebhookEnvelope(payload, { form });
+
+    // Отправляем на вебхук
     const cleanup = () => {
       try {
         sessionStorage.removeItem('car_service_submission');
+        console.log('[Webhook] Submission sent and cleaned up');
       } catch (_) {}
     };
-    dispatchWebhook(envelope, { onFinally: cleanup });
+
+    // Отправляем с задержкой, чтобы убедиться, что страница загружена
+    setTimeout(() => {
+      dispatchWebhook(envelope, { onFinally: cleanup });
+    }, 100);
   } catch (e) {
-    // ничего не делаем, чтобы не ломать страницу
+    console.error('[Webhook] Error in sendWebhookOnThanks:', e);
   }
 })(); 
 
